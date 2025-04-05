@@ -1,0 +1,37 @@
+# ------------------------------------------------------
+# THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
+# ------------------------------------------------------
+
+type Query {
+  findAllTasks: [Task!]!
+
+  """Find Task by their id"""
+  Task(id: String!): Task!
+}
+
+type Task {
+  title: String!
+  description: String!
+  isCompleted: Boolean!
+}
+
+type Mutation {
+  createTask(createTaskDto: CreateTaskDto!): Task!
+
+  """Update Task"""
+  updateTask(input: UpdateTaskInput!): Task!
+  removeTask(id: String!): Task!
+}
+
+input CreateTaskDto {
+  title: String!
+  description: String!
+  isCompleted: Boolean!
+}
+
+input UpdateTaskInput {
+  id: String!
+  title: String
+  description: String
+  isCompleted: Boolean
+}
