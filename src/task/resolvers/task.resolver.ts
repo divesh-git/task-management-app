@@ -19,11 +19,11 @@ export class TaskResolver {
   }
 
   @Mutation(() => Task, {
-    description: 'Update Task'
-})
-async updateTask(@Args('input') input: UpdateTaskInput): Promise<Task> {
+    description: 'Update Task',
+  })
+  async updateTask(@Args('input') input: UpdateTaskInput): Promise<Task> {
     return this.taskService.update(input);
-}
+  }
 
   @Mutation(() => Task)
   removeTask(@Args('id') id: string) {
@@ -31,9 +31,9 @@ async updateTask(@Args('input') input: UpdateTaskInput): Promise<Task> {
   }
 
   @Query(() => Task, {
-    description: 'Find Task by their id'
-})
-async Task(@Args('id') id: string): Promise<Task> {
+    description: 'Find Task by their id',
+  })
+  async Task(@Args('id') id: string): Promise<Task> {
     return this.taskService.findById(id);
-}
+  }
 }
