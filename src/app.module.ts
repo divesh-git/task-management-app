@@ -10,14 +10,14 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
   imports: [
     // ConfigModule to load environment variables
     ConfigModule.forRoot({ isGlobal: true }), // Load .env file globally
-  
+
     TaskModule,
 
     // Use MongooseModule to connect with MongoDB, using the environment variable for URI
     MongooseModule.forRootAsync({
       imports: [ConfigModule], // Import ConfigModule to access ConfigService
       useFactory: async (configService: ConfigService) => ({
-        uri: configService.get<string>('MONGO_URI'), // Access MongoDB URI from .env
+        uri: configService.get<string>('MONGODB_URI'), // Access MongoDB URI from .env
       }),
       inject: [ConfigService], // Inject the ConfigService to get environment variables
     }),
