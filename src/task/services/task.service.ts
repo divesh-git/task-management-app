@@ -4,17 +4,22 @@ import { Model } from 'mongoose';
 import { CreateTaskDto } from '../dto/create-task.dto';
 import { Task } from '../schemas/task.schema';
 import { UpdateTaskInput } from '../dto/update-task.dto';
+import { User } from '../../auth/schemas/auth.schema';
 
 @Injectable()
 export class TaskService {
   constructor(@InjectModel(Task.name) private taskModel: Model<Task>) {}
 
-  async create(createTaskDto: CreateTaskDto): Promise<Task> {
-    const created = new this.taskModel(createTaskDto);
+  async create(createTaskDto: CreateTaskDto, user: User): Promise<Task> {
+    const created = new this.taskModel({
+      ...createTaskDto, // Include task data from the DTO
+      userId: user._id, // Associate the task with the logged-in user
+    });
+  
     const result = await created.save();
     return result;
   }
-
+  
   async findAll(): Promise<Task[]> {
     return this.taskModel.find().exec();
   }

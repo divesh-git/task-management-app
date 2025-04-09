@@ -21,6 +21,8 @@ type Mutation {
   """Update Task"""
   updateTask(input: UpdateTaskInput!): Task!
   removeTask(id: String!): Task!
+  signup(signupInput: SignupInput!): String!
+  login(loginInput: LoginInput!): String!
 }
 
 input CreateTaskDto {
@@ -34,4 +36,15 @@ input UpdateTaskInput {
   title: String
   description: String
   isCompleted: Boolean
+}
+
+input SignupInput {
+  name: String!
+  email: String!
+  password: String!
+}
+
+input LoginInput {
+  email: String!
+  password: String!
 }

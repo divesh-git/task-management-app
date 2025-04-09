@@ -5,6 +5,7 @@ import { GraphQLModule } from '@nestjs/graphql';
 import { ApolloDriver, ApolloDriverConfig } from '@nestjs/apollo';
 import { join } from 'path';
 import { ConfigModule, ConfigService } from '@nestjs/config';
+import { AuthModule } from './auth/auth.module';
 
 @Module({
   imports: [
@@ -28,6 +29,8 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
       autoSchemaFile: join(process.cwd(), 'src/schema.gql'),
       playground: true, // Enable GraphQL playground UI
     }),
+
+    AuthModule,
   ],
 })
 export class AppModule {}

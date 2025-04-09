@@ -3,14 +3,22 @@ import { TaskService } from '../services/task.service';
 import { Task } from '../schemas/task.schema';
 import { CreateTaskDto } from '../dto/create-task.dto';
 import { UpdateTaskInput } from '../dto/update-task.dto';
+import { UseGuards } from '@nestjs/common/decorators';
+import { GqlAuthGuard } from '../../common/auth.guard';
+import { CurrentUser } from '../../common/current-user.decorator';
+import { User } from '../../auth/schemas/auth.schema';
 
 @Resolver(() => Task)
 export class TaskResolver {
   constructor(private readonly taskService: TaskService) {}
 
+  @UseGuards(GqlAuthGuard)
   @Mutation(() => Task)
-  createTask(@Args('createTaskDto') createTaskDto: CreateTaskDto) {
-    return this.taskService.create(createTaskDto);
+  createTask(
+    @Args('createTaskDto') createTaskDto: CreateTaskDto,
+    @CurrentUser() user: User, // 👈 inject current user
+  ) {
+    return this.taskService.create(createTaskDto, user);
   }
 
   @Query(() => [Task])
