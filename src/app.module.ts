@@ -6,31 +6,32 @@ import { ApolloDriver, ApolloDriverConfig } from '@nestjs/apollo';
 import { join } from 'path';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { AuthModule } from './auth/auth.module';
+import { PrometheusModule } from '@willsoto/nestjs-prometheus';
 
 @Module({
   imports: [
-    // ConfigModule to load environment variables
-    ConfigModule.forRoot({ isGlobal: true }), // Load .env file globally
+    PrometheusModule.register(),
+    ConfigModule.forRoot({ isGlobal: true }), 
 
     TaskModule,
 
-    // Use MongooseModule to connect with MongoDB, using the environment variable for URI
     MongooseModule.forRootAsync({
-      imports: [ConfigModule], // Import ConfigModule to access ConfigService
+      imports: [ConfigModule], 
       useFactory: async (configService: ConfigService) => ({
-        uri: configService.get<string>('MONGODB_URI'), // Access MongoDB URI from .env
+        uri: configService.get<string>('MONGODB_URI'), 
       }),
-      inject: [ConfigService], // Inject the ConfigService to get environment variables
+      inject: [ConfigService], 
     }),
 
-    // Use GraphQLModule to set up GraphQL, using environment variables for port and other settings
     GraphQLModule.forRoot<ApolloDriverConfig>({
       driver: ApolloDriver,
       autoSchemaFile: join(process.cwd(), 'src/schema.gql'),
-      playground: true, // Enable GraphQL playground UI
+      playground: true, 
     }),
 
-    AuthModule,
+    AuthModule
+
   ],
+  controllers: [],
 })
 export class AppModule {}
