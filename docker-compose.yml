@@ -3,24 +3,57 @@ version: '3.8'
 services:
   app:
     build: .
-    container_name: nest-task-app
+    container_name: nestapp
     ports:
-      - "3000:3000"    # Expose the app on port 3000
+      - "3000:3000"
     depends_on:
       - mongo
     environment:
       - MONGODB_URI=mongodb://mongo/nest-task-management
-     # Connect to the MongoDB container
+    networks:
+      - app-net
+    expose:
+      - "3000"  # Ensure the Prometheus container can access this port
+
+  mongo:
+    image: mongo:6
+    container_name: mongo
+    ports:
+      - "27017:27017"
+    volumes:
+      - mongo-data:/data/db
     networks:
       - app-net
 
-  mongo:
-    image: mongo:6          # Use the official MongoDB image
-    container_name: mongo
+  nginx:
+    image: nginx:alpine
+    container_name: nginx
     ports:
-      - "27017:27017"       # Expose MongoDB on the host machine's port 27017
+      - "80:80"
     volumes:
-      - mongo-data:/data/db  # Persist data between container restarts
+      - ./default.conf:/etc/nginx/conf.d/default.conf:ro
+    depends_on:
+      - app
+    networks:
+      - app-net
+
+  prometheus:
+    image: prom/prometheus
+    container_name: prometheus
+    ports:
+      - "9090:9090"
+    volumes:
+      - ./prometheus.yml:/etc/prometheus/prometheus.yml
+    networks:
+      - app-net
+
+  grafana:
+    image: grafana/grafana
+    container_name: grafana
+    ports:
+      - "3001:3000"
+    depends_on:
+      - prometheus
     networks:
       - app-net
 
@@ -28,4 +61,4 @@ volumes:
   mongo-data:
 
 networks:
-  app-net: {}  # Define the network explicitly
+  app-net: {}
