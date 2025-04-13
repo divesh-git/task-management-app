@@ -18,6 +18,7 @@ export class TaskResolver {
     @Args('createTaskDto') createTaskDto: CreateTaskDto,
     @CurrentUser() user: User, // 👈 inject current user
   ) {
+    console.log('Logged in user:', user);
     return this.taskService.create(createTaskDto, user);
   }
 
@@ -26,12 +27,12 @@ export class TaskResolver {
     return this.taskService.findAll();
   }
 
-  @Mutation(() => Task, {
-    description: 'Update Task',
-  })
-  async updateTask(@Args('input') input: UpdateTaskInput): Promise<Task> {
-    return this.taskService.update(input);
-  }
+  // @Mutation(() => Task, {
+  //   description: 'Update Task',
+  // })
+  // async updateTask(@Args('input') input: UpdateTaskInput): Promise<Task> {
+  //   return this.taskService.update(input);
+  // }
 
   @Mutation(() => Task)
   removeTask(@Args('id') id: string) {
@@ -43,5 +44,16 @@ export class TaskResolver {
   })
   async Task(@Args('id') id: string): Promise<Task> {
     return this.taskService.findById(id);
+  }
+
+  @UseGuards(GqlAuthGuard)
+  @Mutation(() => Task, {
+    description: 'Update Task',
+  })
+  async updateTask(
+    @Args('input') input: UpdateTaskInput,
+    @CurrentUser() user: User,  // Pass the logged-in user to the service
+  ): Promise<Task> {
+    return this.taskService.update(input, user);  // Pass user to the update method
   }
 }

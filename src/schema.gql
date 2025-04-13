@@ -13,14 +13,15 @@ type Task {
   title: String!
   description: String!
   isCompleted: Boolean!
+  userId: String!
 }
 
 type Mutation {
   createTask(createTaskDto: CreateTaskDto!): Task!
+  removeTask(id: String!): Task!
 
   """Update Task"""
   updateTask(input: UpdateTaskInput!): Task!
-  removeTask(id: String!): Task!
   signup(signupInput: SignupInput!): String!
   login(loginInput: LoginInput!): String!
 }

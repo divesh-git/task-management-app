@@ -8,7 +8,7 @@ RUN npm install
 
 # Copy the entire project and build the app
 COPY . .
-RUN npm run build
+RUN npm run build   
 
 # --- Step 2: Run stage ---
 FROM node:20-alpine

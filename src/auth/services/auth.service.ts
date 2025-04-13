@@ -18,6 +18,7 @@ export class AuthService {
     const hashed = await bcrypt.hash(signupInput.password, 10);
     const user = new this.userModel({ ...signupInput, password: hashed });
     await user.save();
+    console.log("------------>user.email")
     return this.login({ email: user.email, password: signupInput.password });
   }
 
@@ -29,6 +30,7 @@ export class AuthService {
     if (!isMatch) throw new UnauthorizedException('Invalid credentials');
 
     const payload = { sub: user._id, email: user.email };
+    console.log(payload);
     return {
       accessToken: this.jwtService.sign(payload),
     };
