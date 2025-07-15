@@ -10,4 +10,8 @@ export class CreateTaskDto {
 
   @Field()
   isCompleted: boolean;
+
+  @Field({ nullable: true })
+  imageUrl?: string;
+
 }

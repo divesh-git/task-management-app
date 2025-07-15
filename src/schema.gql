@@ -7,6 +7,9 @@ type Query {
 
   """Find Task by their id"""
   Task(id: String!): Task!
+
+  """Tasks created by logged in user"""
+  myTasks: [Task!]!
 }
 
 type Task {
