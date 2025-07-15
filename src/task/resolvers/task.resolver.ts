@@ -56,4 +56,13 @@ export class TaskResolver {
   ): Promise<Task> {
     return this.taskService.update(input, user);  // Pass user to the update method
   }
+  
+  @UseGuards(GqlAuthGuard)
+  @Query(() => [Task], { description: 'Tasks created by logged in user' })
+  myTasks(@CurrentUser() user: User) {
+    return this.taskService.findByUserId(user._id);
+  }
+
 }
+
+

@@ -22,5 +22,10 @@ export class Task {
   @Field()
   userId: string;  // This will be the user's ID
 
+  @Prop({ required: false })
+  @Field({ nullable: true })
+  imageUrl?: string;
+
+
 }
 export const TaskSchema = SchemaFactory.createForClass(Task);
