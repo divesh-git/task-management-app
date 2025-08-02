@@ -1,0 +1,26 @@
+# Node modules - heavy and rebuilt inside container
+node_modules
+
+# Build output directory
+dist
+
+# Vite cache folder (optional)
+.vite
+
+# Logs
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Editor directories and files
+.vscode
+.idea
+.DS_Store
+
+# Environment files (if you use any)
+.env
+.env.local
+.env.*.local
+
+# Misc
+coverage
