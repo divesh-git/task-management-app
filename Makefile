@@ -4,6 +4,8 @@ DOCKER_IMAGE := $(PROJECT_NAME):latest
 DOCKER_COMPOSE := docker-compose.yml
 
 # Build Docker image
+down: 
+	docker-compose down
 up:
 	docker-compose up --build -d 
 
@@ -49,5 +51,7 @@ nginx:
 
 
 
-.PHONY: up build run nginx
+.PHONY: up build run nginx down logs stop-mongo clean-container create-network mongo-run
+# End of Makefile
+# This Makefile provides commands to manage the Docker containers for the task management application
 

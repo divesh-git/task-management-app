@@ -6,6 +6,8 @@ import { Model } from 'mongoose';
 import { User } from '../schemas/auth.schema';
 import { SignupInput } from '../dto/signup.input';
 import { LoginInput } from '../dto/login.input';
+import { AuthResponse } from '../dto/login.response';
+import { UserDto } from 'src/model/user.model';
 
 @Injectable()
 export class AuthService {
@@ -18,20 +20,21 @@ export class AuthService {
     const hashed = await bcrypt.hash(signupInput.password, 10);
     const user = new this.userModel({ ...signupInput, password: hashed });
     await user.save();
-    console.log("------------>user.email")
+
     return this.login({ email: user.email, password: signupInput.password });
   }
 
-  async login(loginInput: LoginInput): Promise<{ accessToken: string }> {
+  async login(loginInput: LoginInput): Promise<AuthResponse> {
     const user = await this.userModel.findOne({ email: loginInput.email });
 
     if (!user) throw new UnauthorizedException('Invalid credentials');
     const isMatch = await bcrypt.compare(loginInput.password, user.password);
     if (!isMatch) throw new UnauthorizedException('Invalid credentials');
 
-    const payload = { sub: user._id, email: user.email };
-    console.log(payload);
+    const userResponse: UserDto = { id: user.id, email: user.email, name: user.name };
+    const payload = { sub: user.id, email: user.email };
     return {
+      user: userResponse,
       accessToken: this.jwtService.sign(payload),
     };
   }

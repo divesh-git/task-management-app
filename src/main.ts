@@ -5,7 +5,10 @@ import * as promClient from 'prom-client';  // Import Prometheus client
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
-
+  app.enableCors({
+    origin: 'http://localhost:8080', // or '*', or use a function for dynamic checking
+    credentials: true, // if you're using cookies or Authorization headers
+  });
   // Config service for reading environment variables
   const configService = app.get(ConfigService);
   const port = configService.get<number>('PORT') || 3000;
